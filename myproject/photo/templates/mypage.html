@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Mypage{% endblock %}
+
+{% block contents %}
+<div style="background-color: #E0F7FA; min-height: 100vh; padding-top: 20px;">
+    {% if user.is_authenticated %}
+        <br>
+        <div style="text-align: center;">
+            <h4>{{ user.username }}さんのマイページ</h4>
+            {% if object_list.count == 0 %}
+                <p>{{ user.username }}さんの投稿はありません</p>
+            {% else %}
+                <p>投稿<strong>{{ object_list.count }}</strong>件</p>
+            {% endif %}
+            <form action="{% url 'photo:works' %}">
+                <button type="submit" class="btn-custom">投稿する</button>
+            <form action="{% url 'photo:index' %}" method="GET" style="display: inline;">
+            <button type="submit" class="btn-custom">書の庭へ</button>
+            </form>
+
+
+            </form>
+        </div>
+        <hr>
+    {% endif %}
+
+    <div class="container">
+        {% include "photos_list.html" %}
+        {% include "pagination.html" %}
+    </div>
+</div>
+
+<style>
+    .btn-custom {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        background-color: #4CAF50; /* 緑色 */
+        color: white;
+        border: none;
+        border-radius: 20px; /* 丸みのある角 */
+        cursor: pointer;
+        padding: 10px 20px; /* パディング */
+        transition: background-color 0.3s ease; /* ホバー時のアニメーション */
+    }
+
+    .btn-custom:hover {
+        background-color: #45a049; /* ホバー時の色 */
+    }
+
+    body {
+        margin: 0;
+    }
+</style>
+{% endblock %}

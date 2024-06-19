@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block title %}Photo Detail{% endblock %}
+
+{% block contents %}
+<br>
+<div class="container">
+  <div class="row">
+    <div class="col offset-3">
+      <h2>{{ object.title }}</h2>
+      <p>{{ object.comment }}</p>
+      <br>
+      <p>{{ object.posted_at }}に投稿</p>
+      <p><img src="{{ object.image1.url }}"></p>
+      {% if object.image2 %}
+        <p><img src="{{ object.image2.url }}"></p>
+      {% endif %}
+      {% if object.image3 %}
+        <p><img src="{{ object.image3.url }}"></p>
+      {% endif %}
+      {% if object.image4 %}
+        <p><img src="{{ object.image4.url }}"></p>
+      {% endif %}
+      {% if object.image5 %}
+        <p><img src="{{ object.image5.url }}"></p>
+      {% endif %}
+      {% if object.image6 %}
+        <p><img src="{{ object.image6.url }}"></p>
+      {% endif %}
+      {% if object.image7 %}
+        <p><img src="{{ object.image7.url }}"></p>
+      {% endif %}
+      {% if object.image8 %}
+        <p><img src="{{ object.image8.url }}"></p>
+      {% endif %}
+      {% if object.image9 %}
+        <p><img src="{{ object.image9.url }}"></p>
+      {% endif %}
+      {% if object.image10 %}
+        <p><img src="{{ object.image10.url }}"></p>
+      {% endif %}
+                 {% if user.is_authenticated %}
+                {% if user != object.user %}
+                    <button id="like-button" data-liked="{{ is_liked }}" data-url="{% url 'photo:photo_like' object.pk %}">
+                        いいね ({{ object.likes.count }})
+                    </button>
+                {% else %}
+                    <p>自分の投稿には「いいね」できません</p>
+                {% endif %}
+            {% endif %}
+      
+            {% if request.user == object.user %}
+            <form method="POST">
+
+            <a href="{% url 'photo:photo_delete' object.pk %}"
+               class="btn btn-primary my-2">削除する</a>
+            {% endif %}
+            
+      
+    </div> 
+  </div> 
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const likeButton = document.getElementById('like-button');
+    if (likeButton) {
+        const liked = likeButton.getAttribute('data-liked') === 'True';
+        likeButton.textContent = liked ? `いいねを取り消す ({{ object.likes.count }})` : `いいね ({{ object.likes.count }})`;
+
+        likeButton.addEventListener('click', function () {
+            const url = likeButton.getAttribute('data-url');
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            })
+            .then(response => response.json())
+            .then(data => {
+                likeButton.textContent = data.liked ? `いいねを取り消す (${data.count})` : `いいね (${data.count})`;
+                likeButton.setAttribute('data-liked', data.liked);
+            });
+        });
+    }
+});
+</script>
+{% endblock %}
+

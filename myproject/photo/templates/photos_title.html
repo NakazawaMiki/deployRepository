@@ -1,0 +1,64 @@
+<section class="py-5 text-center container-fluid" style="background-color: #E0F7FA;">
+  <div class="row py-lg-5">
+    <div class="col-lg-6 col-md-8 mx-auto">
+      <head>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&family=Sawarabi+Mincho&display=swap">
+        <style>
+          .custom-font {
+            font-family: 'Kosugi Maru', sans-serif;
+            color: navy;
+          }
+          .text-black {
+            color: black;
+          }
+          .shodo-font {
+            font-family: 'Sawarabi Mincho', serif;
+            color: navy;
+          }
+
+          /* カスタムボタンのスタイル */
+          .btn-primary {
+            background-color: #4CAF50; /* 緑色 */
+            border-color: #4CAF50; /* 緑色 */
+          }
+          .btn-primary:hover {
+            background-color: #45a049; /* ホバー時の色 */
+            border-color: #45a049; /* ホバー時の色 */
+          }
+          .btn-secondary {
+            background-color: #4CAF50; /* 緑色 */
+            border-color: #4CAF50; /* 緑色 */
+            color: #fff; /* 文字色を白に設定 */
+          }
+          .btn-secondary:hover {
+            background-color: #45a049; /* ホバー時の色 */
+            border-color: #45a049; /* ホバー時の色 */
+          }
+        </style>
+      </head>
+      <body>
+        <h1 class="shodo-font" style="font-weight: bold; font-size: 3rem;">書の庭</h1>
+        <p class="lead text-muted">
+          <span class="text-black">～コメントを見て写真に描かれた世界に思いを馳せよう～</span>
+        </p>
+      </body>
+
+      <p>
+        {% if user.is_authenticated %}
+        <div class="d-flex justify-content-center"> 
+          <button type="button" onclick="location.href='{% url 'photo:works' %}'" class="btn btn-primary my-2 me-2">投稿する</button>
+          <form action="{% url 'accounts:logout' %}" method="post" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-success my-2">ログアウト</button>
+          </form>
+        </div>
+        {% else %}
+        <div class="d-flex justify-content-center">
+          <button type="button" onclick="location.href='{% url 'accounts:signup' %}'" class="btn btn-primary my-2 me-2">今すぐ新規登録</button>
+          <button type="button" onclick="location.href='{% url 'accounts:login' %}'" class="btn btn-outline-success my-2">登録済みの方はログイン</button>
+        </div>
+        {% endif %}
+      </p>
+    </div>
+  </div>
+</section>

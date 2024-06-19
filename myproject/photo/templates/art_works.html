@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% block title %}Works{% endblock %}
+
+{% block contents %}
+<br>
+
+<div class="container">
+  <div class="row">
+    <div class="col offset-2">
+      <form id="image-form" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table id="image-table">
+          <tr>
+            <th>カテゴリ</th>
+            <td>{{ form.category }}</td>
+          </tr>
+          <tr>
+            <th>タイトル</th>
+            <td>{{ form.title }}</td>
+          </tr>
+          <tr>
+            <th>コメント</th>
+            <td>{{ form.comment }}</td>
+          </tr>
+                  </tr>
+        <tr id="max-lines-message">
+            <td colspan="2" style="padding-top: 10px;" colspan="3">
+                ※画像は最大10枚まで
+            </td>
+        </tr>
+          <tr class="image-row">
+            <th>画像1</th>
+            <td>{{ form.image1 }} <img id="preview1" src="#" alt="画像1 プレビュー" style="display:none; max-width: 200px; max-height: 200px;" /></td>
+            <td><button type="button" class="add-image btn btn-custom">+</button></td>
+            <td><button type="button" class="remove-image btn btn-custom">-</button></td>
+        </tr>
+        </table>
+        <hr>
+        <button type="submit" class="btn btn-custom">投稿する</button>
+      </form>
+      <div style="color: red;">
+        {% for field in form %}
+          {% for error in field.errors %}
+            <p>{{ field.label }}: {{ error }}</p>
+          {% endfor %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  body {
+    background-color: #e6f7ff; /* 背景を薄い水色に設定 */
+  }
+
+  th, td {
+    padding: 10px;
+    vertical-align: top;
+    width: auto;
+  }
+
+  th {
+    text-align: left;
+  }
+
+  .btn-custom {
+    font-family: Arial, sans-serif;
+    font-size: 12px; 
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px; 
+    cursor: pointer;
+    padding: 5px 15px; 
+    margin-top: 10px;
+    width: auto; 
+    display: inline-block; 
+  }
+
+  .btn-custom:hover {
+    background-color: #45a049;
+  }
+
+  img {
+    display: block;
+    margin-top: 10px;
+    max-width: 200px;
+    max-height: 200px;
+  }
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    var maxImages = 10;
+    var imageCount = $('.image-row').length;
+
+    function updateButtons() {
+      $('.image-row .add-image').remove();
+      $('.image-row .remove-image').show();
+      if ($('.image-row').length < maxImages) {
+        $('.image-row').last().find('td').eq(1).append('<button type="button" class="add-image btn btn-custom">+</button>');
+      }
+      if ($('.image-row').length === 1) {
+        $('.image-row .remove-image').hide();
+      }
+    }
+
+    function updateImageLabels() {
+      $('.image-row').each(function(index) {
+        $(this).find('th').text('画像' + (index + 1));
+        $(this).find('img').attr('id', 'preview' + (index + 1));
+        $(this).find('input[type="file"]').attr('name', 'image' + (index + 1));
+      });
+    }
+
+    updateButtons();
+    updateImageLabels();
+
+    $('#image-table').on('click', '.add-image', function() {
+      if (imageCount < maxImages) {
+        var newRow = $('.image-row').first().clone();
+        newRow.find('input').val('');
+        newRow.find('img').attr('src', '#').hide();
+        newRow.appendTo('#image-table');
+        imageCount++;
+        updateButtons();
+        updateImageLabels();
+      }
+    });
+
+    $('#image-table').on('click', '.remove-image', function() {
+      if ($('.image-row').length > 1) {
+        $(this).closest('.image-row').remove();
+        imageCount--;
+        updateButtons();
+        updateImageLabels();
+      }
+    });
+
+    $('#image-table').on('change', 'input[type="file"]', function() {
+      var input = this;
+      var previewId = $(this).next('img').attr('id');
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          $('#' + previewId).attr('src', e.target.result).show();
+        }
+        reader.readAsDataURL(input.files[0]);
+      } else {
+        $('#' + previewId).hide();
+      }
+    });
+  });
+</script>
+{% endblock %}
+
+
+
+
+
+
+

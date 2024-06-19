@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>works success</title>
+    <style>
+        body {
+            background-color: lightblue; 
+            margin: 0; 
+            padding: 0; 
+            height: 100vh; 
+            display: flex;
+            justify-content: center;
+            align-items: center; 
+        }
+        .container {
+            background-color: white; 
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+            text-align: center;
+            margin-top: -150px; 
+        }
+        a.button, button.button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #4CAF50; /* Green */
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        a.button:hover, button.button:hover {
+            background-color: #45a049; /* Darker green */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>投稿完了しました</h1>
+        <form action="{% url 'photo:index' %}" method="get">
+            <button type="submit" class="button">書の庭へ</button>
+        </form>
+    </div>
+</body>
+</html>
+
+
